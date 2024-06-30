@@ -3,17 +3,17 @@ import { ErrorCode, HttpException } from './exceptions/root';
 import { InternalException } from './exceptions/exception_handle';
 
 export const errorHandler = (method: Function) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return async(req: Request, res: Response, next: NextFunction) => {
         try{
 
-            method(req, res, next);
+            await method(req, res, next);
 
         }catch(error:any) {
             
             let exception: HttpException;
 
             if(error instanceof HttpException) {
-                exception = error
+                exception = error;
             }
             else {
                 exception = new InternalException("Something went wrong", ErrorCode.INTERNAL_EXCEPTION, error)
