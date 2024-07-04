@@ -15,9 +15,9 @@ export const signup = async (
   next: NextFunction
 ) => {
   
-    const validationResult = SignUpSchema.safeParse(req.body);
-    if(!validationResult.success) {
-      throw new UnprocessableEntity("Unprocessable Entity", ErrorCode.UNPROCESSABLE_ENTITY, validationResult.error);
+    const authValidationResult = SignUpSchema.safeParse(req.body);
+    if(!authValidationResult.success) {
+      throw new UnprocessableEntity("Unprocessable Entity", ErrorCode.UNPROCESSABLE_ENTITY, authValidationResult.error);
     }
 
     const { name, email, password } = req.body;
