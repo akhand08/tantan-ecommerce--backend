@@ -15,7 +15,7 @@ export const addAddress = async (req: Request, res: Response, next: NextFunction
 
     const address = await prismaClient.address.create({data: {
         ...req.body,
-        userId: req.user.id
+        userId: req.user?.id
     }})
 
     res.json(address);
@@ -42,7 +42,7 @@ export const listAddress = async (req: Request, res: Response, next: NextFunctio
     let addresses = await prismaClient.address.findMany({
 
         where: {
-            userId: req.user.id
+            userId: req.user?.id
         }
     })
 
@@ -60,7 +60,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     let shippingAddress : Address;
     let billingAddress: Address;
 
-    if(updateUserValidationResult.data.defaultShippingAddress) {
+    if(updateUserValidationResult.data.defaultShippingAddress && req.user) {
         try{
 
             shippingAddress = await prismaClient.address.findFirstOrThrow({
@@ -81,7 +81,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     
 
 
-    if(updateUserValidationResult.data.defaultBillingAddress) {
+    if(updateUserValidationResult.data.defaultBillingAddress && req.user) {
         try{
 
             billingAddress = await prismaClient.address.findFirstOrThrow({
@@ -101,7 +101,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
     const updateUser = await prismaClient.user.update({
         where: {
-            id: req.user.id
+            id: req.user?.id
         },
         data: updateUserValidationResult
     })

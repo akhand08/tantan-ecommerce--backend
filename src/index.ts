@@ -17,7 +17,23 @@ app.use(errorMiddleware);
 
 export const prismaClient = new PrismaClient({
     log:['query']
-})
+}).$extends({
+    result: {
+        address: {
+            formattedAddress: {
+                needs: {
+                    firstLine: true,
+                    secondLine: true,
+                    country: true,
+                    city: true,
+                    pincode: true
+                },
+                compute: (addrs) => {
+                    return `${addrs.firstLine} ${addrs.secondLine}  ${addrs.city}  ${addrs.country} ${addrs.pincode}`;
+                }
+            }
+    }
+}})
 
 
 app.listen(PORT, () => {

@@ -28,7 +28,7 @@ export const addItemToCart = async (req: Request, res: Response, next: NextFunct
 
     const cart = await prismaClient.cartItems.create({
         data: {
-            userId: req.user.id,
+            userId: req.user?.id as number,
             productId: cartValidationResult.data.productId,
             quantity: cartValidationResult.data.quantity
         }
@@ -51,7 +51,7 @@ export const deleteItemFromCart = async (req: Request, res: Response, next: Next
         throw new NotFoundException("Cart Not Found", ErrorCode.CART_NOT_FOUND, null);
     }
 
-    if( req.user.id !== cart.userId ) {
+    if( req.user?.id !== cart.userId ) {
         throw new BadRequestException("Cart doest not belong to user", ErrorCode.CART_NOT_FOUND, 400, null);
     }
 
@@ -82,7 +82,7 @@ export const changeQuantity = async (req: Request, res: Response, next: NextFunc
         throw new NotFoundException("Cart Not Found", ErrorCode.CART_NOT_FOUND, null);
     }
 
-    if( req.user.id !== cart.userId ) {
+    if( req.user?.id !== cart.userId ) {
         throw new BadRequestException("Cart doest not belong to user", ErrorCode.CART_NOT_FOUND, 400, null);
     }
 
@@ -104,7 +104,7 @@ export const changeQuantity = async (req: Request, res: Response, next: NextFunc
 export const getCart = async (req: Request, res: Response, next: NextFunction) => {
     const cart = await prismaClient.cartItems.findMany({
         where: {
-            id: +req.user.id
+            id: req.user?.id
         },
         include: {
             product: true
