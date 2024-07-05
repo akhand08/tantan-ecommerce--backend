@@ -81,7 +81,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     
 
 
-    if(updateUserValidationResult.data.billingAddress) {
+    if(updateUserValidationResult.data.defaultBillingAddress) {
         try{
 
             billingAddress = await prismaClient.address.findFirstOrThrow({
@@ -105,6 +105,8 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
         },
         data: updateUserValidationResult
     })
+
+    res.json(updateUser);
 
 
 
